@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pista tablas elegantes - Más Información</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <img src="logo.jpeg" alt="Logo Derecha" style="max-height: 150px; margin-right: 20px;">
+  <style>
+    body {
+      background-image: url('fondo_pistas.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .carousel-item video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="text-center">Pista Tablas Elegantes</h1>
+
+    <!-- Carrusel con autoplay -->
+    <div id="mediaCarousel" class="carousel slide mb-3" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        <!-- Imagen -->
+        <div class="carousel-item active">
+          <img src="pista_tabla2.jpeg" class="d-block w-100" alt="Pista Tablas Elegantes">
+        </div>
+
+        <!-- Video (sin loop) -->
+        <div class="carousel-item">
+          <video id="promoVideo" class="d-block w-100" autoplay muted playsinline>
+            <source src="pista_tabla4.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+          </video>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#mediaCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#mediaCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+
+    <!-- Info -->
+    <p><strong>Precio:</strong> $300 MXN por módulo</p>
+    <p><strong>Medidas comunes:</strong> 5x5m o para uso en rodete</p>
+    <p><strong>Colores disponibles:</strong> Madera Oxford</p>
+    <p><strong>Incluye:</strong> Transporte, instalación, limpieza al término de su colocación.</p>
+    <a href="index.html" class="btn btn-secondary">Volver al catálogo</a>
+  </div>
+
+  <!-- Bootstrap JS + Script para controlar el carrusel -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const carousel = document.querySelector('#mediaCarousel');
+      const carouselInstance = bootstrap.Carousel.getOrCreateInstance(carousel);
+      const video = document.getElementById('promoVideo');
+
+      // Pausar el carrusel mientras el video se reproduce
+      video.addEventListener('play', () => {
+        carouselInstance.pause();
+      });
+
+      // Reanudar carrusel una vez termine el video
+      video.addEventListener('ended', () => {
+        carouselInstance.next(); // pasa al siguiente slide
+        carouselInstance.cycle(); // reanuda el auto-slide
+      });
+    });
+  </script>
+</body>
+</html>

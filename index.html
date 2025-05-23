@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producciones JABY - Renta de Pistas de Baile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="logo.jpeg" type="logo.jpeg">
+
+    <style>
+        #ubicacion {
+            background-color: #004d40; /* Fondo más oscuro para mejor visibilidad */
+            color: white; /* Texto blanco */
+            border: 2px solid #00796b; /* Borde verde */
+        }
+        h2.text-center {
+            color: #004d40; /* Verde oscuro */
+            font-size: 2.5rem; /* Un tamaño de fuente más grande */
+            font-weight: bold;
+        }
+        
+        p.text-center {
+            color: #00796b; /* Verde más claro */
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        button#ubicacion {
+            background-color: #00796b; /* Verde claro */
+            color: white; /* Texto blanco */
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        button#ubicacion:hover {
+            background-color: #004d40; /* Verde oscuro al pasar el mouse */
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo ligeramente opaco */
+            color: #004d40; /* Texto oscuro para mayor contraste */
+        }
+        
+        .card-body h5 {
+            color: #00796b; /* Verde para el título de la tarjeta */
+        }
+        
+        .card-body p {
+            font-size: 1.1rem; /* Aumentar ligeramente el tamaño del precio */
+            font-weight: bold;
+            color: #004d40; /* Color oscuro para los precios */
+        }
+        /* Cambiar color del texto del label */
+        .form-label {
+           color: #1eeecb; /* Verde oscuro */
+}
+
+        /* Cambiar color del texto del select */
+        #ubicacion {
+             color: #00796b; /* Verde claro */
+}
+
+        body {
+            background: linear-gradient(-45deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
+            background-size: 400% 400%;
+            animation: fondoAnimado 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+    
+        @keyframes fondoAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    
+        /* Efecto de brillo flotante */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: flotando 10s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+    
+        @keyframes flotando {
+            0% { transform: translate(-50%, -50%); }
+            50% { transform: translate(0%, 0%); }
+            100% { transform: translate(-50%, -50%); }
+        }
+    
+        .pistas-img {
+            height: 250px;
+            object-fit: cover;
+        }
+    
+        .card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            z-index: 1;
+        }
+    
+        .card-title {
+            font-weight: bold;
+        }
+    
+        header, footer {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            z-index: 2;
+        }
+    
+        footer p {
+            margin: 0;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        /* Animación pulse al hacer clic */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+.btn.clicked {
+    animation: pulse 0.4s;
+}
+header img {
+    max-height: 150px;
+    margin: 0 20px;
+}
+header div.text-center {
+    flex-grow: 1; /* Para que el contenido central tenga espacio suficiente */
+}
+    body {
+        background: url('fondopista.jpg') no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+        overflow-x: hidden;
+        z-index: 0;
+    }
+
+   
+
+    .container, header, footer {
+        z-index: 1;
+        position: relative;
+    }
+</style>
+
+    
+</head>
+<body>
+    <!-- Modal de Información de Ubicación -->
+<div class="modal fade" id="modalUbicacion" tabindex="-1" aria-labelledby="modalUbicacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="modalUbicacionLabel">Información sobre Ubicación <br> (Antes de cotizar seleccione local o foraneo)</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <h6><strong>Local:</strong></h6>
+          <ul>
+            <li>Lagunilla</li>
+            <li>Ixmiquilpan</li>
+          </ul>
+          <h6><strong>Foránea:</strong></h6>
+          <ul>
+            <li>Omitlán</li>
+            <li>Tulancingo</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <header class="bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <img src="logo.jpeg" alt="Logo Izquierda" style="max-height: 150px; margin-left: 20px;">
+        <div class="text-center">
+            <h1 class="m-0">Producciones JABY</h1>
+            <p class="m-0">Renta de pistas de baile para tus eventos</p>
+            <p class="m-0">Tel: 7721295281 | 7721513925 | Email: produccionesjaby@gmail.com</p>
+        </div>
+        <img src="logo.jpeg" alt="Logo Derecha" style="max-height: 150px; margin-right: 20px;">
+    </header>
+    
+    
+    
+
+    <div class="container mt-4">
+        <h2 class="text-center">Nuestros Modelos de Pistas</h2>
+        <div class="row" id="pistas-container">
+
+            <div class="col-12 text-center my-4">
+    <label for="ubicacion" class="form-label">Selecciona tu ubicación:</label>
+    <select id="ubicacion" class="form-select w-50 mx-auto" onchange="actualizarPrecios()">
+        <option value="local">Local</option>
+        <option value="foranea">Foránea</option>
+    </select>
+    <!-- Botón para más información sobre la ubicación -->
+<div class="mt-3">
+    <button class="btn btn-info" onclick="mostrarInfoUbicacion()">Más información para tu ubicación</button>
+</div>
+
+</div>
+
+            <!-- PISTA LED NORMAL -->
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                <div class="card">
+                    <img src="lednormal.jpg" class="card-img-top pistas-img" alt="Pista LED">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Pista LED Normal</h5>
+                        <p class="card-text">$350 MXN por modulo</p>
+                        <input type="number" class="form-control mb-2" id="metros_pista1" placeholder="Tamaño en modulo">
+                        <div class="d-flex justify-content-between gap-2">
+                            <button class="btn btn-primary w-50" onclick="handleAgregarDesdeBoton('Pista LED Normal', 500, 'metros_pista1')">Agregar</button>
+                            <button class="btn btn-secondary w-50" onclick="window.location.href='info-led-normal.html'">Más información</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                <div class="card">
+                  <img src="vitagepixel.jpg" class="card-img-top pistas-img" alt="Vintage Pixel Clásico">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Vintage Pixel Clásico</h5>
+                    <p id="precio_vintage_pixel" class="card-text">
+                      Desde <strong>$300</strong> hasta <strong>$350</strong> MXN<br>
+                      <small class="text-muted">(según el tipo de pista)</small>
+                    </p>
+                    <input type="number" class="form-control mb-2" id="metros_pista5" placeholder="Tamaño en módulos">
+                    <select class="form-select mb-2" id="tipo_pista5">
+                      <option value="300">Madera ($300 MXN por módulo)</option>
+                      <option value="350">Pixel ($350 MXN por módulo)</option>
+                    </select>
+                    <div class="d-flex justify-content-between gap-2">
+                      <button class="btn btn-primary w-50" onclick="handleAgregarDesdeBoton('Vintage Pixel Clásico', 0, 'metros_pista5', 'tipo_pista5')">Agregar</button>
+                      <button class="btn btn-secondary w-50" onclick="window.location.href='info-vintage-pixel.html'">Más información</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <!-- PISTA TABLAS ELEGANTES -->
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                <div class="card">
+                    <img src="pista_tabla.jpeg" class="card-img-top pistas-img" alt="Tablas elegantes">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Pista Tabla Elegante</h5>
+                        <p id="precio_tabla_elegante" class="card-text">$300 MXN por modulo</p>
+                        <input type="number" class="form-control mb-2" id="metros_pista3" placeholder="Tamaño en modulos">
+                        <div class="d-flex justify-content-between gap-2">
+                            <button class="btn btn-primary w-50" onclick="handleAgregarDesdeBoton('Tablas elegantes', 300, 'metros_pista')">Agregar</button>
+                            <button class="btn btn-secondary w-50" onclick="window.location.href='info-tablas_elegantes.html'">Más información</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        <!-- LETRAS LED -->
+        <h2 class="text-center">Letras LED</h2>
+        <p class="text-center">Tenemos disponibles de la A a la Z. El precio es de $500 MXN por letra.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <img src="letrasled.jpg" class="card-img-top" alt="Letras LED">
+                    <div class="card-body">
+                        <h5 class="card-title">Selecciona la cantidad de letras</h5>
+                        <input type="number" class="form-control mb-2" id="cantidad_letras" placeholder="Cantidad de letras" min="1">
+                        <button class="btn btn-primary w-50" onclick="agregarAlCarrito('Letras LED', 500, 'cantidad_letras')">Agregar</button>
+                        <a href="info-letras-led.html" class="btn btn-info">Más Información</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALERÍA -->
+    <div class="container mt-4">
+        <h2 class="text-center">Galería de Eventos</h2>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="burbujagaleria.jpg" class="d-block w-100" alt="Evento 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="infinitigaleria.jpg" class="d-block w-100" alt="Evento 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="infinitigaleria2.jpg" class="d-block w-100" alt="Evento 3">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+   <!-- CARRITO -->
+<div class="container mt-4">
+    <h2 class="text-center">Carrito de Cotización</h2>
+    <ul id="carrito" class="list-group mb-3"></ul>
+    <h4 class="text-center">Total: <span id="total">$0</span> MXN</h4>
+    <button class="btn btn-success w-100" onclick="finalizarCotizacion()">Finalizar Cotización</button>
+  </div>
+  
+  <footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>&copy; 2025 Producciones JABIS - Todos los derechos reservados.</p>
+  </footer>
+  
+  <script>
+    let total = 0;
+    let carritoItems = [];
+    
+    function agregarAlCarrito(nombre, precioBase, cantidadId, tipoSelectId = null) {
+      const cantidad = parseInt(document.getElementById(cantidadId).value);
+      if (isNaN(cantidad) || cantidad <= 0) {
+        alert("Por favor, ingresa una cantidad válida.");
+        return;
+      }
+    
+      let tipo = "";
+      let precio = precioBase;
+    
+      if (tipoSelectId) {
+        const select = document.getElementById(tipoSelectId);
+        if (select) {
+          precio = parseInt(select.value);
+          tipo = select.options[select.selectedIndex].text.split(" ")[0]; // Ej: "Madera"
+        }
+      }
+    
+      // Guarda el producto en carritoItems
+      carritoItems.push({
+        nombre,
+        tipo,
+        cantidad
+      });
+    
+      renderizarCarrito(); // Actualiza la vista del carrito
+    }
+    function renderizarCarrito() {
+      const ubicacion = document.getElementById("ubicacion").value;
+      const precios = preciosBase[ubicacion];
+    
+      const lista = document.getElementById("carrito");
+      lista.innerHTML = "";
+      total = 0;
+    
+      carritoItems.forEach(item => {
+        let precio = 0;
+    
+        if (item.nombre === "Vintage Pixel Clásico") {
+          if (item.tipo === "Madera") {
+            precio = (ubicacion === "foranea") ? 350 : 300;
+          } else if (item.tipo === "Pixel") {
+            precio = (ubicacion === "foranea") ? 400 : 350;
+          }
+        } else {
+          precio = precios[item.nombre] || 0;
+        }
+    
+        const subtotal = precio * item.cantidad;
+        total += subtotal;
+    
+        const li = document.createElement("li");
+        li.classList.add("list-group-item");
+        li.innerText = `${item.nombre}${item.tipo ? ' (' + item.tipo + ')' : ''} - ${item.cantidad} módulo(s) - $${subtotal} MXN`;
+        lista.appendChild(li);
+      });
+    
+      document.getElementById("total").innerText = `$${total}`;
+    }
+    
+    // Efecto visual al presionar botones
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        this.classList.add('clicked');
+        setTimeout(() => this.classList.remove('clicked'), 400);
+      });
+    });
+  
+    // Precios base por ubicación
+   // Precios base por ubicación
+   let preciosBase = {
+    local: {
+      'Pista LED Normal': 350,
+      'Pista Tabla Elegante': 300,
+      'Vintage Pixel Clásico': {
+        Madera: 300,
+        Pixel: 350
+      },
+      'Letras LED': 500
+    },
+    foranea: {
+      'Pista LED Normal': 450,
+      'Pista Tabla Elegante': 400,
+      'Vintage Pixel Clásico': {
+        Madera: 360,
+        Pixel: 420
+      },
+      'Letras LED': 600
+    }
+  };
+  
+
+    function obtenerFactorUbicacion() {
+        const ubicacion = document.getElementById("ubicacion").value;
+        return ubicacion === "foranea" ? 1.2 : 1; // Foránea incrementa precio un 20%
+      }
+      
+      function actualizarPrecios() {
+        const ubicacion = document.getElementById("ubicacion")?.value || "local";
+        const precios = preciosBase[ubicacion];
+      
+        document.querySelectorAll(".card").forEach(card => {
+          const titulo = card.querySelector(".card-title")?.innerText;
+          if (!titulo) return;
+      
+          // Caso especial: Vintage Pixel Clásico
+          if (titulo === "Vintage Pixel Clásico") {
+            const preciosOpciones = precios[titulo];
+            const select = card.querySelector("#tipo_pista5");
+      
+            if (select) {
+              select.innerHTML = ""; // limpiar
+              for (const tipo in preciosOpciones) {
+                const precio = preciosOpciones[tipo];
+                const option = document.createElement("option");
+                option.value = precio;
+                option.textContent = `${tipo} ($${precio} MXN por módulo)`;
+                select.appendChild(option);
+              }
+            }
+      
+            // Cambiar texto "Desde $x hasta $y"
+            const textoPrecio = card.querySelector("#precio_vintage_pixel");
+            const valores = Object.values(preciosOpciones);
+            const min = Math.min(...valores);
+            const max = Math.max(...valores);
+            if (textoPrecio) {
+              textoPrecio.innerHTML = `Desde <strong>$${min}</strong> hasta <strong>$${max}</strong> MXN<br><small class="text-muted">(según el tipo de pista)</small>`;
+            }
+      
+            return; // ya se manejó esta card
+          }
+      
+          // Para las demás pistas
+          if (precios[titulo]) {
+            const nuevoPrecio = precios[titulo];
+            const precioElemento = card.querySelector(".card-text");
+            if (precioElemento) {
+              precioElemento.innerText = `$${nuevoPrecio} MXN por módulo`;
+            }
+      
+            const botonAgregar = card.querySelector(".btn-primary");
+            const input = card.querySelector("input");
+            if (botonAgregar && input) {
+              botonAgregar.setAttribute("onclick", `agregarAlCarrito('${titulo}', ${nuevoPrecio}, '${input.id}')`);
+              renderizarCarrito(); // 👈 Esto asegura que el carrito se actualice si cambias la ubicación
+
+            }
+          }
+        });
+      }
+      
+      
+    document.addEventListener("DOMContentLoaded", actualizarPrecios);
+    document.getElementById("ubicacion").addEventListener("change", actualizarPrecios);
+
+  
+    function mostrarInfoUbicacion() {
+      const modal = new bootstrap.Modal(document.getElementById('modalUbicacion'));
+      modal.show();
+    }
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
